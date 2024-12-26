@@ -14,7 +14,7 @@ app = FastAPI()
 es_client = Elasticsearch(hosts=ES_HOSTS)
 INDEX_NAME = "movies"
 
-templates = Jinja2Templates(directory="templates")  # Указываем на папку с шаблонами
+templates = Jinja2Templates(directory="/Users/moses/Documents/cs/Python/db_kp/elasticass/online_cinema/search/templates")  # Указываем на папку с шаблонами
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -98,4 +98,4 @@ if __name__ == "__main__":
     # index_movies_to_es(es_client, INDEX_NAME, prepared_movies)
 
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8006)

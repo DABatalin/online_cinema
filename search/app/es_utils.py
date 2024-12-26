@@ -7,9 +7,10 @@ from typing import List, Dict
 # Параметры подключения к PostgreSQL (заменить на свои!)
 DB_CONFIG = {
     "host": "localhost",
-    "database": "movies_db",
-    "user": "postgres",
-    "password": "qwerty",
+    "database": "fast_api",
+    "user": "admin",
+    "password": "admin",
+    "port": '5431'
 }
 
 # Параметры подключения к Elasticsearch
@@ -29,9 +30,10 @@ def get_movies_from_postgres() -> List[tuple]:
             f.vote_count,
             ARRAY_AGG(g.name) AS genres
         FROM films f
-        LEFT JOIN film_genres fg ON f.id = fg.film_id
-        LEFT JOIN genre g ON g.id = ANY(fg.genre_ids)
-        GROUP BY f.id, f.title, f.film_link,f.average_rating, f.description,f.vote_count
+        LEFT JOIN filmgenres fg ON f.id = fg.film_id
+        LEFT JOIN genres g ON g.id = fg.genre_id
+        GROUP BY f.id, f.title, f.film_link, f.average_rating, f.description, f.vote_count
+        LIMIT 1000
     """)
     movies = cur.fetchall()
     cur.close()

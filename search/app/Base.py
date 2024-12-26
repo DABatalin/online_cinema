@@ -6,11 +6,11 @@ import os
 
 DB_CONFIG = {
     "host": "localhost",
-    "database": "movies_db",
-    "user": "postgres",
-    "password": "qwerty",
-} # заменить на свои!
-
+    "database": "fast_api",
+    "user": "admin",
+    "password": "admin",
+    "port": '5431'
+}
 
 def _prepare_row_data(row, columns, row_index, array_delimiter=','):
     """Prepares a single row for insertion, converting values to the correct type."""
@@ -88,8 +88,8 @@ def import_csv_data(csv_file_path, table_name, columns, row_limit=None, skip_row
             conn.close()
 
 
-def import_film_genres(csv_file_path, table_name, columns, films_ids,  array_delimiter=','):
-    """Imports data into film_genres table filtering by film_id in films"""
+def import_film_genres(csv_file_path, table_name, columns, films_ids):
+    """Imports data into filmgenres table filtering by film_id in films"""
     conn = None
     cur = None
     try:
@@ -105,22 +105,16 @@ def import_film_genres(csv_file_path, table_name, columns, films_ids,  array_del
             if not set(columns).issubset(reader.fieldnames):
                 raise ValueError(f"The specified columns '{columns}' are not present in the CSV header. Available columns are: {reader.fieldnames}")
 
-
             data = []
             for i, row in enumerate(reader):
-
-                row_data = _prepare_row_data(row, columns, i+1, array_delimiter)
-                if row_data is None:
-                    continue # Skip invalid row
-                film_id = row_data[0] #film_id is the first element
+                film_id = int(row['film_id'])
+                genre_id = int(row['genre_id'])
                 if film_id in films_ids:
-                    data.append(row_data)
+                    data.append((film_id, genre_id))
 
-            query = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))})"
+            query = f"INSERT INTO {table_name} (film_id, genre_id) VALUES (%s, %s)"
             if data:
                  cur.executemany(query, data)
-
-
 
         conn.commit()
         print(f"Data successfully imported into table {table_name} filtering by film_id.")
