@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Форма авторизации -->
+    <div class="auth-container" id="authContainer">
+        <h1 id="authTitle">Login</h1>
+        <div class="error" id="error">Invalid email or password</div>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="submitAuth()">Log In</button>
+        <div class="toggle" onclick="toggleAuth()">Don't have an account? Register</div>
+        <button onclick="goToMainPage()">Перейти на главную</button>
+    </div>
+
+    <!-- Секция выбора фильмов (только для регистрации) -->
+    <div class="movies-container" id="moviesContainer" style="display: none;">
+        <h3>Выберите 10 фильмов, которые вам нравятся</h3>
+        <div id="moviesList"></div>
+        <div class="error" id="moviesError">Выберите ровно 10 фильмов!</div>
+        <button onclick="submitSelectedMovies()">Подтвердить выбор</button>
+    </div>
+
+    <!-- Главная страница (появляется после входа/регистрации) -->
+    <div class="main-container" id="mainContainer" style="display: none;">
+        <!-- Верхняя панель с поисковой строкой и кнопкой "Мой профиль" -->
+        <header>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Поиск фильмов" oninput="searchMovies()">
+            </div>
+            <button id="profileButton" class="profile-btn">Мой профиль</button>
+        </header>
+
+        <!-- Основной контент -->
+        <main>
+            <section id="recommendedSection">
+                <h2>Вам рекомендовано</h2>
+                <div id="recommendedMovies" class="movies-list"></div>
+            </section>
+
+            <section id="genresSection">
+                <h2>Популярное по жанрам</h2>
+                <div id="genresMovies" class="movies-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальное окно для подробной информации о фильме -->
+    <div id="movieDetailsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeMovieDetails()">&times;</span>
+            <h1 id="movieTitle"></h1>
+            <p><strong>Жанр:</strong> <span id="movieGenre"></span></p>
+            <p><strong>Описание:</strong> <span id="movieDescription"></span></p>
+            <p><strong>Оценка:</strong> <span id="movieRating"></span></p>
+
+            <h2>Смотреть фильм</h2>
+            <video width="640" height="360" controls id="moviePlayer">
+                <source id="movieVideoSource" src="video.mp4" type="video/mp4">
+                Ваш браузер не поддерживает элемент видео.
+            </video>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/film.js"></script>
+</body>
+</html>
