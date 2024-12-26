@@ -1,0 +1,35 @@
+<!-- Моя простая html страница для тестирования поиска-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Поиск фильмов</title>
+</head>
+<body>
+    <h1>Поиск фильмов</h1>
+    <form method="post" action="/search">
+        <input type="text" name="query" placeholder="Введите название фильма" value="{{ query if query else '' }}">
+        <button type="submit">Поиск</button>
+    </form>
+
+    {% if results %}
+        <h2>Результаты поиска:</h2>
+        <ul>
+            {% for result in results %}
+                <li>
+                   <b>Movie ID</b>: {{result.movieID}}<br> <!-- id из БД-->
+                   <b>{{ result.title }}</b><br>
+                    <b>Description</b>: {{ result.description }}<br>
+                     <b>Link</b>: {{result.film_link}}<br>
+                     <b>Genres</b>: {{ result.genres }}<br>
+                     <b>Votes</b>: {{result.vote_count}}<br>
+                     <b>Rating</b>: {{result.average_rating}}
+                </li>
+            {% endfor %}
+        </ul>
+        {% elif query %}
+           <p>No movies found for query: "{{ query }}"</p>
+        {% endif %}
+</body>
+</html>
+
