@@ -24,7 +24,7 @@ async def get_genre(request_body: RBGenre = Depends()) -> SGenre:
 
 @router.post("/add/")
 async def add_genre(genre: SGenreAdd) -> dict:
-    check = await GenreDAO.add(**genre.dict())
+    check = await GenreDAO.add(**genre.model_dump())
     if check:
         return {"message": "Жанр успешно добавлена!", "genre": genre}
     else:
@@ -45,9 +45,9 @@ async def update_genre(
     genre: SGenre
 ) -> dict:
     try:
-        print(genre.dict())
-        id = genre.dict().pop('id')
-        check = await GenreDAO.update(filter_by={'id': id}, **genre.dict())
+        print(genre.model_dump())
+        id = genre.model_dump().pop('id')
+        check = await GenreDAO.update(filter_by={'id': id}, **genre.model_dump())
         if check:
             return {"message": f"Жанр с ID {genre.id} успешно обновлена!"}
         else:

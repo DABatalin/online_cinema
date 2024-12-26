@@ -24,7 +24,7 @@ async def get_actor(request_body: RBActor = Depends()) -> SActor:
 
 @router.post("/add/")
 async def add_actor(actor: SActorAdd) -> dict:
-    check = await ActorDAO.add(**actor.dict())
+    check = await ActorDAO.add(**actormodel_dump())
     if check:
         return {"message": "Актер успешно добавлен!", "actor": actor}
     else:
@@ -45,8 +45,8 @@ async def update_actor(
     actor: SActor
 ) -> dict:
     try:
-        id = actor.dict().pop('id')
-        check = await ActorDAO.update(filter_by={'id': id}, **actor.dict())
+        id = actormodel_dump().pop('id')
+        check = await ActorDAO.update(filter_by={'id': id}, **actormodel_dump())
         if check:
             return {"message": f"Актер с ID {actor.id} успешно обновлен!"}
         else:

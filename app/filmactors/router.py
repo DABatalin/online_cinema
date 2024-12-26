@@ -24,7 +24,7 @@ async def get_film_and_actor(request_body: RBFilmActor = Depends()) -> SFilmActo
 
 @router.post("/add/")
 async def add_film_actor(film_actor: SFilmActorAdd) -> dict:
-    check = await FilmActorDAO.add(**film_actor.dict())
+    check = await FilmActorDAO.add(**film_actor.model_dump())
     if check:
         return {"message": "Связь актера с фильмом успешно добавлена!", "film_actor": film_actor}
     else:
@@ -45,9 +45,9 @@ async def update_film(
     filmActor: SFilmActor
 ) -> dict:
     try:
-        film_id = filmActor.dict().pop('id1')
-        actor_id = filmActor.dict().pop('id2')
-        check = await FilmActorDAO.update(filter_by={'film_id': film_id, 'actor_id': actor_id}, **filmActor.dict())
+        film_id = filmActor.model_dump().pop('id1')
+        actor_id = filmActor.model_dump().pop('id2')
+        check = await FilmActorDAO.update(filter_by={'film_id': film_id, 'actor_id': actor_id}, **filmActor.model_dump())
         if check:
             return {"message": f"Связь ID {filmActor.id} успешно обновлен!"}
         else:

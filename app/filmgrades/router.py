@@ -24,7 +24,7 @@ async def get_film_and_grade(request_body: RBFilmGrade = Depends()) -> SFilmGrad
 
 @router.post("/add/")
 async def add_film_grade(film_grade: SFilmGradeAdd) -> dict:
-    check = await FilmGradeDAO.add(**film_grade.dict())
+    check = await FilmGradeDAO.add(**film_grade.model_dump())
     if check:
         return {"message": "Связь режиссера с фильмом успешно добавлена!", "film_grade": film_grade}
     else:
@@ -45,11 +45,11 @@ async def update_film(
     filmGrade: SFilmGrade
 ) -> dict:
     try:
-        print(filmGrade.dict())
-        film_id = filmGrade.dict().pop('film_id')
-        user_id = filmGrade.dict().pop('user_id')
-        print(filmGrade.dict())
-        check = await FilmGradeDAO.update(filter_by={'film_id': film_id, 'user_id': user_id}, **filmGrade.dict())
+        print(filmGrade.model_dump())
+        film_id = filmGrade.model_dump().pop('film_id')
+        user_id = filmGrade.model_dump().pop('user_id')
+        print(filmGrade.model_dump())
+        check = await FilmGradeDAO.update(filter_by={'film_id': film_id, 'user_id': user_id}, **filmGrade.model_dump())
         if check:
             return {"message": f"Связь ID {filmGrade.film_id} успешно обновлен!"}
         else:

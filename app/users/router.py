@@ -20,7 +20,7 @@ async def register_user(user_data: SUserRegister) -> dict:
             status_code=status.HTTP_409_CONFLICT,
             detail='Пользователь уже существует'
         )
-    user_dict = user_data.dict()
+    user_dict = user_data.model_dump()
     user_dict['password'] = get_password_hash(user_data.password)
     await UserDAO.add(**user_dict)
     return {'message': 'Вы успешно зарегистрированы!'}
@@ -57,9 +57,9 @@ async def update_user(
     user: SUser
 ) -> dict:
     try:
-        print(user.dict())
-        email = user.dict().pop('email')
-        check = await UserDAO.update(filter_by={'email': email}, **user.dict())
+        print(user.model_dump())
+        email = user.model_dump().pop('email')
+        check = await UserDAO.update(filter_by={'email': email}, **user.model_dump())
         if check:
             return {"message": f"Жанр с ID {user.id} успешно обновлена!"}
         else:
@@ -94,7 +94,7 @@ async def dell_user_by_id(user_id: int) -> dict:
 
 @get_router.post("/add/")
 async def add_user(user: SUser) -> dict:
-    check = await UserDAO.add(**user.dict())
+    check = await UserDAO.add(**user.model_dump())
     if check:
         return {"message": "Пользователь успешно добавлен!", "user": user}
     else:
@@ -106,9 +106,9 @@ async def update_user(
     user: SUser
 ) -> dict:
     try:
-        print(user.dict())
-        email = user.dict().pop('email')
-        check = await UserDAO.update(filter_by={'email': email}, **user.dict())
+        print(user.model_dump())
+        email = user.model_dump().pop('email')
+        check = await UserDAO.update(filter_by={'email': email}, **user.model_dump())
         if check:
             return {"message": f"Пользователь с ID {user.id} успешно обновлена!"}
         else:

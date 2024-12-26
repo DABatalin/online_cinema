@@ -24,7 +24,7 @@ async def get_director(request_body: RBDirector = Depends()) -> SDirector:
 
 @router.post("/add/")
 async def add_director(director: SDirectorAdd) -> dict:
-    check = await DirectorDAO.add(**director.dict())
+    check = await DirectorDAO.add(**director.model_dump())
     if check:
         return {"message": "Режиссер успешно добавлен!", "director": director}
     else:
@@ -45,9 +45,9 @@ async def update_director(
     director: SDirector
 ) -> dict:
     try:
-        print(director.dict())
-        id = director.dict().pop('id')
-        check = await DirectorDAO.update(filter_by={'id': id}, **director.dict())
+        print(director.model_dump())
+        id = director.model_dump().pop('id')
+        check = await DirectorDAO.update(filter_by={'id': id}, **director.model_dump())
         if check:
             return {"message": f"Режиссер с ID {director.id} успешно обновлен!"}
         else:

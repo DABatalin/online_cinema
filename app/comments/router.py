@@ -24,7 +24,7 @@ async def get_actor(request_body: RBComment = Depends()) -> SComment:
 
 @router.post("/add/")
 async def add_film_comment(film_comment: SCommentAdd) -> dict:
-    check = await CommentDAO.add(**film_comment.dict())
+    check = await CommentDAO.add(**film_comment.model_dump())
     if check:
         return {"message": "Комментарий успешно добавлен!", "film_comment": film_comment}
     else:
@@ -45,8 +45,8 @@ async def update_film(
     comment: SComment
 ) -> dict:
     try:
-        id = comment.dict().pop('id')
-        check = await CommentDAO.update(filter_by={'id': id}, **comment.dict())
+        id = comment.model_dump().pop('id')
+        check = await CommentDAO.update(filter_by={'id': id}, **comment.model_dump())
         if check:
             return {"message": f"Коментарий ID {comment.id} успешно обновлен!"}
         else:

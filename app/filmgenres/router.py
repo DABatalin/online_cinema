@@ -24,7 +24,7 @@ async def get_film_and_genre(request_body: RBFilmGenre = Depends()) -> SFilmGenr
 
 @router.post("/add/")
 async def add_film_genre(film_genre: SFilmGenreAdd) -> dict:
-    check = await FilmGenreDAO.add(**film_genre.dict())
+    check = await FilmGenreDAO.add(**film_genre.model_dump())
     if check:
         return {"message": "Связь жанра с фильмом успешно добавлена!", "film_genre": film_genre}
     else:
@@ -45,9 +45,9 @@ async def update_film(
     filmGenre: SFilmGenre
 ) -> dict:
     try:
-        film_id = filmGenre.dict().pop('id1')
-        genre_id = filmGenre.dict().pop('id2')
-        check = await FilmGenreDAO.update(filter_by={'film_id': film_id, 'genre_id': genre_id}, **filmGenre.dict())
+        film_id = filmGenre.model_dump().pop('id1')
+        genre_id = filmGenre.model_dump().pop('id2')
+        check = await FilmGenreDAO.update(filter_by={'film_id': film_id, 'genre_id': genre_id}, **filmGenre.model_dump())
         if check:
             return {"message": f"Связь ID {filmGenre.id} успешно обновлен!"}
         else:

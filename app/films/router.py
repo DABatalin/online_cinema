@@ -42,7 +42,7 @@ async def get_film(request_body: RBFilm = Depends()) -> SFilm:
 
 @router.post("/add/")
 async def add_film(film: SFilmAdd) -> dict:
-    check = await FilmDAO.add(**film.dict())
+    check = await FilmDAO.add(**film.model_dump())
     if check:
         return {"message": "Фильм успешно добавлен!", "film": film}
     else:
@@ -63,8 +63,8 @@ async def update_film(
     film: SFilm
 ) -> dict:
     try:
-        id = film.dict().pop('id')
-        check = await FilmDAO.update(filter_by={'id': id}, **film.dict())
+        id = film.model_dump().pop('id')
+        check = await FilmDAO.update(filter_by={'id': id}, **film.model_dump())
         if check:
             return {"message": f"Фильм с ID {film.id} успешно обновлен!"}
         else:

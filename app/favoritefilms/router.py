@@ -24,7 +24,7 @@ async def get_film_and_user(request_body: RBFavoriteFilm = Depends()) -> SFavori
 
 @router.post("/add/")
 async def add_film_user(film_user: SFavoriteFilmAdd) -> dict:
-    check = await FavoriteFilmDAO.add(**film_user.dict())
+    check = await FavoriteFilmDAO.add(**film_user.model_dump())
     if check:
         return {"message": "Любимый фильм успешно добавлен!", "film_user": film_user}
     else:
@@ -45,9 +45,9 @@ async def update_film(
     filmDirector: SFavoriteFilm
 ) -> dict:
     try:
-        film_id = filmDirector.dict().pop('film_id')
-        user_id = filmDirector.dict().pop('user_id')
-        check = await FavoriteFilmDAO.update(filter_by={'film_id': film_id, 'user_id': user_id}, **filmDirector.dict())
+        film_id = filmDirector.model_dump().pop('film_id')
+        user_id = filmDirector.model_dump().pop('user_id')
+        check = await FavoriteFilmDAO.update(filter_by={'film_id': film_id, 'user_id': user_id}, **filmDirector.model_dump())
         if check:
             return {"message": f"Связь ID {filmDirector.id} успешно обновлен!"}
         else:

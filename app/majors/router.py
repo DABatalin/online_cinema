@@ -8,7 +8,7 @@ router = APIRouter(prefix='/majors', tags=['Работа с факультета
 
 @router.post("/add/")
 async def register_user(major: SMajorsAdd) -> dict:
-    check = await MajorsDAO.add(**major.dict())
+    check = await MajorsDAO.add(**major.model_dump())
     if check:
         return {"message": "Факультет успешно добавлен!", "major": major}
     else:

@@ -24,7 +24,7 @@ async def get_film_and_director(request_body: RBFilmDirector = Depends()) -> SFi
 
 @router.post("/add/")
 async def add_film_director(film_director: SFilmDirectorAdd) -> dict:
-    check = await FilmDirectorDAO.add(**film_director.dict())
+    check = await FilmDirectorDAO.add(**film_director.model_dump())
     if check:
         return {"message": "Связь режиссера с фильмом успешно добавлена!", "film_director": film_director}
     else:
@@ -45,9 +45,9 @@ async def update_film(
     filmDirector: SFilmDirector
 ) -> dict:
     try:
-        film_id = filmDirector.dict().pop('id1')
-        director_id = filmDirector.dict().pop('id2')
-        check = await FilmDirectorDAO.update(filter_by={'film_id': film_id, 'director_id': director_id}, **filmDirector.dict())
+        film_id = filmDirector.model_dump().pop('id1')
+        director_id = filmDirector.model_dump().pop('id2')
+        check = await FilmDirectorDAO.update(filter_by={'film_id': film_id, 'director_id': director_id}, **filmDirector.model_dump())
         if check:
             return {"message": f"Связь ID {filmDirector.id} успешно обновлен!"}
         else:
