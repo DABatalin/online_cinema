@@ -14,12 +14,10 @@ from app.filmactors.router import router as router_filmactors
 from app.filmgrades.router import router as router_filmgrades
 from app.favoritefilms.router import router as router_favoritefilms
 from app.exceptions import TokenExpiredException, TokenNotFoundException
-
 from elasticsearch import Elasticsearch
 from app.config import settings
 
-
-
+from fastapi.staticfiles import StaticFiles
 # Получаем путь к директории текущего скрипта
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -37,6 +35,8 @@ es = Elasticsearch(settings.ES_HOST)
 @app.get("/")
 def home_page():
     return {"message": "Привет, БД!"}
+
+app.mount("/front", StaticFiles(directory="front"), name="static")
 
 
 app.include_router(router_users)

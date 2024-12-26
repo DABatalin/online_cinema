@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Поиск фильмов" oninput="searchMovies()">
+        </div>
+        <button id="profileButton" class="profile-btn" onclick="location.href='profile.html'">Мой профиль</button>
+    </header>
+
+    <main>
+        <section id="recommendedSection">
+            <h2>Вам рекомендовано</h2>
+            <div id="recommendedMovies" class="movies-list"></div>
+        </section>
+
+        <section id="genresSection">
+            <h2>Популярное по жанрам</h2>
+            <div id="genresMovies" class="movies-list"></div>
+        </section>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

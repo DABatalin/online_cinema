@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильм</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="filmDetails" class="movie-details-container">
+        <h1 id="movieTitle"></h1>
+        <p><strong>Жанр:</strong> <span id="movieGenre"></span></p>
+        <p><strong>Описание:</strong> <span id="movieDescription"></span></p>
+        <p><strong>Рейтинг:</strong> <span id="movieRating" class="rating"></span></p>
+        <video id="movieVideo" controls>
+            <source id="movieVideoSource" src="video.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script src="js/film.js"></script>
+</body>
+</html>

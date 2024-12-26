@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация и Регистрация</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Форма авторизации и регистрации -->
+    <div class="auth-container" id="authContainer">
+        <h1 id="authTitle">Login</h1>
+        <div class="error" id="error">Invalid email or password</div>
+
+        <!-- Поля формы -->
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="firstName" placeholder="First Name" style="display: none;">
+        <input type="text" id="lastName" placeholder="Last Name" style="display: none;">
+        <input type="tel" id="phone" placeholder="Phone Number" style="display: none;">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" style="display: none;">
+
+        <!-- Кнопка действия -->
+        <button onclick="submitAuth()" id="authButton">Log In</button>
+
+        <!-- Переключатель между авторизацией и регистрацией -->
+        <div class="toggle" onclick="toggleAuth()">
+            Don't have an account? Register
+        </div>
+    </div>
+
+    <!-- Секция выбора фильмов -->
+    <div class="movies-container" id="moviesContainer" style="display: none;">
+        <h3>Выберите 10 фильмов, которые вам нравятся</h3>
+        <div id="moviesList"></div>
+        <div class="error" id="moviesError">Выберите ровно 10 фильмов!</div>
+        <button onclick="submitSelectedMovies()">Подтвердить выбор</button>
+    </div>
+
+    <!-- Ссылка для перехода на главную страницу -->
+    <a href="main.html" id="goToMainPage">Go to Main Page</a>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
