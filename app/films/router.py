@@ -5,6 +5,9 @@ from app.films.rb import RBFilm
 from app.films.schemas import SFilm, SFilmAdd
 from app.users.dependencies import get_current_user, get_current_admin_user
 from app.users.models import User
+from elasticsearch import Elasticsearch
+
+es = Elasticsearch("http://localhost:9200")
 
 router = APIRouter(prefix='/films', tags=['Работа с фильмами'])
 
@@ -12,6 +15,20 @@ router = APIRouter(prefix='/films', tags=['Работа с фильмами'])
 @router.get("/", summary="Получить все фильмы")
 async def get_all_students(request_body: RBFilm = Depends()) -> list[SFilm]:
     return await FilmDAO.find_all(**request_body.to_dict())
+
+
+@router.get("/search/")
+async def search_films(query: str):
+    # Поиск по названию и описанию
+    result = es.search(index="films", body={
+        "query": {
+            "multi_match": {
+                "query": query,
+                "fields": ["title", "description"]
+            }
+        }
+    })
+    return result["hits"]["hits"]
 
 
 @router.get("/{film_id}", summary="Получить один фильм по айди")
