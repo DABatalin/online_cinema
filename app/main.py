@@ -15,6 +15,10 @@ from app.filmgrades.router import router as router_filmgrades
 from app.favoritefilms.router import router as router_favoritefilms
 from app.exceptions import TokenExpiredException, TokenNotFoundException
 
+from elasticsearch import Elasticsearch
+from app.config import settings
+
+
 
 # Получаем путь к директории текущего скрипта
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,6 +30,8 @@ parent_dir = os.path.dirname(script_dir)
 path_to_json = os.path.join(parent_dir, 'students.json')
 
 app = FastAPI()
+
+es = Elasticsearch(settings.ES_HOST)
 
 
 @app.get("/")

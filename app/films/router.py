@@ -20,7 +20,7 @@ async def get_all_students(request_body: RBFilm = Depends()) -> list[SFilm]:
 @router.get("/search/")
 async def search_films(query: str):
     # Поиск по названию и описанию
-    result = es.search(index="films", body={
+    result = es.search(index="movies", body={
         "query": {
             "multi_match": {
                 "query": query,
