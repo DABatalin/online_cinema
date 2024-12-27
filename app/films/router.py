@@ -7,10 +7,19 @@ from app.users.dependencies import get_current_user, get_current_admin_user
 from app.users.models import User
 from elasticsearch import Elasticsearch
 
+import httpx
+from typing import List
+from pydantic import BaseModel
+
 es = Elasticsearch("http://localhost:9200")
 
 router = APIRouter(prefix='/films', tags=['Работа с фильмами'])
 
+# URL вашего Docker-контейнера с FastAPI
+RECOMMENDATION_API_URL = "http://localhost:80/recommend/"
+
+class MovieList(BaseModel):
+    movie_ids: List[int]
 
 @router.get("/", summary="Получить все фильмы")
 async def get_all_students(request_body: RBFilm = Depends()) -> list[SFilm]:
@@ -71,3 +80,15 @@ async def update_film(
             return {"message": "Ошибка обновления фильма или фильм не найден."}
     except Exception as e:
         return {"message": f"Ошибка: {str(e)}"}
+
+
+@router.post("/recommend/", summary="Получить рекомендации по фильмам")
+async def get_recommendations(movies: MovieList):
+    try:
+        # Отправляем POST-запрос к Docker-контейнеру
+        async with httpx.AsyncClient() as client:
+            response = await client.post(RECOMMENDATION_API_URL, json={"movie_ids": movies.movie_ids})
+            response.raise_for_status()  # Проверяем на ошибки
+            return response.json()
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=e.response.status_code, detail=str(e))
