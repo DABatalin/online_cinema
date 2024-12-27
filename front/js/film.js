@@ -1,52 +1,43 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    const movieTitle = document.getElementById("movieTitle");
+    const movieGenre = document.getElementById("movieGenre");
+    const movieDescription = document.getElementById("movieDescription");
+    const movieRating = document.getElementById("movieRating");
+    const movieVideoSource = document.getElementById("movieVideoSource");
+
+    // Извлечение ID фильма из URL
     const urlParams = new URLSearchParams(window.location.search);
-    const filmId = urlParams.get('id');
+    const movieID = urlParams.get("id");
 
-    if (filmId) {
-        loadFilmDetails(filmId);
-    }
+    if (movieID) {
+        const movies = await fetchMovies(movieID); // Получаем список фильмов
+        const movie = movies.find(m => m._source.movieID === parseInt(movieID)); // Находим нужный фильм
 
-    function loadFilmDetails(filmId) {
-        const movies = getMovies();
-        const film = movies.find(movie => movie.id === parseInt(filmId));
-
-        if (film) {
-            document.getElementById("movieTitle").textContent = film.title;
-            document.getElementById("movieGenre").textContent = film.genre;
-            document.getElementById("movieDescription").textContent = film.description;
-            document.getElementById("movieRating").textContent = film.rating;
-            document.getElementById("movieVideoSource").src = film.video_url;
+        if (movie) {
+            const movieData = movie._source; // Данные фильма из _source
+            movieTitle.textContent = movieData.title;
+            movieGenre.textContent = movieData.genres.join(", ");
+            movieDescription.textContent = movieData.description;
+            movieRating.textContent = movieData.average_rating;
+            movieVideoSource.src = movieData.film_link || "video.mp4"; // Используем ссылку или заглушку
         } else {
-            alert("Фильм не найден!");
+            movieTitle.textContent = "Фильм не найден.";
         }
+    } else {
+        movieTitle.textContent = "ID фильма не указан.";
     }
 
-    function getMovies() {
-        return [
-            { 
-                "id": 1, 
-                "title": "Inception", 
-                "genre": "Sci-Fi", 
-                "description": "A mind-bending thriller about a thief who enters the dreams of others.", 
-                "rating": "8.8/10", 
-                "video_url": "path_to_inception_video.mp4" 
-            },
-            { 
-                "id": 2, 
-                "title": "The Godfather", 
-                "genre": "Crime", 
-                "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.", 
-                "rating": "9.2/10", 
-                "video_url": "path_to_godfather_video.mp4" 
-            },
-            { 
-                "id": 3, 
-                "title": "The Dark Knight", 
-                "genre": "Action", 
-                "description": "Batman faces off against the Joker, a criminal mastermind who seeks to create chaos in Gotham City.", 
-                "rating": "9.0/10", 
-                "video_url": "path_to_dark_knight_video.mp4" 
+    // Функция для получения фильмов (из API /search/)
+    async function fetchMovies(query) {
+        try {
+            const response = await fetch(`/films/search/?query=${query}`);
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
             }
-        ];
+            return await response.json();
+        } catch (error) {
+            console.error("Error fetching movie details:", error);
+            return [];
+        }
     }
 });

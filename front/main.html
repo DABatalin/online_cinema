@@ -10,21 +10,10 @@
     <header>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Поиск фильмов" oninput="searchMovies()">
+            <ul id="suggestions" class="suggestions-list"></ul> <!-- Контейнер для подсказок -->
         </div>
         <button id="profileButton" class="profile-btn" onclick="location.href='profile.html'">Мой профиль</button>
     </header>
-
-    <main>
-        <section id="recommendedSection">
-            <h2>Вам рекомендовано</h2>
-            <div id="recommendedMovies" class="movies-list"></div>
-        </section>
-
-        <section id="genresSection">
-            <h2>Популярное по жанрам</h2>
-            <div id="genresMovies" class="movies-list"></div>
-        </section>
-    </main>
 
     <script src="js/main.js"></script>
 </body>
