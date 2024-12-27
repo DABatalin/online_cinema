@@ -39,8 +39,8 @@ class BaseDAO:
         columns = ", ".join(values.keys())
         placeholders = ", ".join([f":{key}" for key in values.keys()])
         query = text(f"INSERT INTO {cls.table_name} ({columns}) VALUES ({placeholders})")
-        print(query)
-        print(values)
+        # print(query)
+        # print(values)
         async with async_session_maker() as session:
             async with session.begin():
                 try:
