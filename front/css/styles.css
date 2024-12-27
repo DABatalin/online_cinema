@@ -267,3 +267,131 @@ h2 {
     cursor: pointer; /* Меняем курсор на указатель */
     transition: color 0.3s ease; /* Плавный переход цвета */
 }
+
+
+.recommended-container {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recommended-container h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#recommendedMovies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.recommended-movie {
+    flex: 1 0 calc(33.333% - 15px); /* Карточки занимают по 1/3 ширины контейнера */
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.recommended-movie:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recommended-movie h3 {
+    font-size: 1.2rem;
+    color: #444;
+    margin: 10px 0;
+    line-height: 1.4;
+}
+
+
+.films-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.films-container h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Список фильмов */
+#filmList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Элемент фильма */
+.film-item {
+    flex: 1 0 calc(33.333% - 15px); /* Три фильма в ряд, адаптируемость */
+    background-color: #ffffff;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.film-item:hover {
+    transform: scale(1.05);
+    border-color: #007BFF;
+}
+
+.film-item.selected {
+    background-color: #007BFF;
+    color: #fff;
+    border-color: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Название фильма */
+.film-item h2 {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+/* Кнопка отправки выбора */
+#submitSelection {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+#submitSelection:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#submitSelection:hover:not(:disabled) {
+    background-color: #0056b3;
+}

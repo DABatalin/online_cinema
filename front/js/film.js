@@ -10,33 +10,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     const movieID = urlParams.get("id");
 
     if (movieID) {
-        const movies = await fetchMovies(movieID); // Получаем список фильмов
-        const movie = movies.find(m => m._source.movieID === parseInt(movieID)); // Находим нужный фильм
+        try {
+            // Получаем данные о фильме через batch API
+            const movies = await fetchMovieDetails(movieID);
 
-        if (movie) {
-            const movieData = movie._source; // Данные фильма из _source
-            movieTitle.textContent = movieData.title;
-            movieGenre.textContent = movieData.genres.join(", ");
-            movieDescription.textContent = movieData.description;
-            movieRating.textContent = movieData.average_rating;
-            movieVideoSource.src = movieData.film_link || "video.mp4"; // Используем ссылку или заглушку
-        } else {
-            movieTitle.textContent = "Фильм не найден.";
+            if (movies && movies.length > 0) {
+                const movie = movies[0]; // Предполагается, что batch возвращает массив с одним элементом
+
+                // Отображение информации о фильме
+                movieTitle.textContent = movie.title || "Название отсутствует";
+                movieGenre.textContent = movie.genres ? movie.genres.join(", ") : "Жанр отсутствует";
+                movieDescription.textContent = movie.description || "Описание отсутствует";
+                movieRating.textContent = movie.average_rating || "Рейтинг отсутствует";
+                movieVideoSource.src = movie.film_link || "video.mp4"; // Используем ссылку на фильм или заглушку
+            } else {
+                movieTitle.textContent = "Фильм не найден.";
+            }
+        } catch (error) {
+            console.error("Ошибка при загрузке информации о фильме:", error);
+            movieTitle.textContent = "Ошибка загрузки данных фильма.";
         }
     } else {
         movieTitle.textContent = "ID фильма не указан.";
     }
 
-    // Функция для получения фильмов (из API /search/)
-    async function fetchMovies(query) {
+    // Функция для получения информации о фильме через batch API
+    async function fetchMovieDetails(movieID) {
         try {
-            const response = await fetch(`/films/search/?query=${query}`);
+            const response = await fetch('/films/batch/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify([parseInt(movieID)]), // Передаём ID фильма как массив
+            });
+
             if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
+                const errorText = await response.text();
+                console.error("Ошибка запроса:", errorText);
+                throw new Error(`Ошибка сервера: ${response.status}`);
             }
-            return await response.json();
+
+            return await response.json(); // Возвращаем массив фильмов
         } catch (error) {
-            console.error("Error fetching movie details:", error);
+            console.error("Ошибка при запросе batch API:", error);
             return [];
         }
     }

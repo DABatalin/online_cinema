@@ -69,7 +69,7 @@ function submitAuth() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(bodyData),
-        credentials: 'include' // Важно для работы с куками
+        credentials: 'include'
     })
         .then(response => {
             if (!response.ok) {
@@ -81,13 +81,15 @@ function submitAuth() {
         })
         .then(data => {
             if (isLogin) {
+                // Сохраняем токен и переходим на главную страницу
+                localStorage.setItem('token', data.token);
                 alert('Login successful!');
                 errorDiv.style.display = 'none';
-                window.location.href = 'main.html'; // Перенаправление на главную страницу после логина
+                window.location.href = 'main.html';
             } else {
-                alert('Registration successful! Please log in.');
-                errorDiv.style.display = 'none';
-                toggleAuth(); // Переключение на режим логина
+                // В случае регистрации перенаправляем на страницу выбора фильмов
+                sessionStorage.setItem('pendingRegistration', JSON.stringify(bodyData));
+                window.location.href = 'choose-films.html';
             }
         })
         .catch(error => {
@@ -96,7 +98,57 @@ function submitAuth() {
         });
 }
 
-// Проверка авторизации перед доступом к главной странице
+// Завершение регистрации после выбора фильмов
+function completeRegistration(selectedMovies) {
+    const pendingRegistration = JSON.parse(sessionStorage.getItem('pendingRegistration'));
+
+    if (!pendingRegistration) {
+        alert('No pending registration data found!');
+        return;
+    }
+
+    // Добавляем выбор фильмов к данным регистрации
+    pendingRegistration.favorite_movies = selectedMovies;
+
+    fetch('http://localhost:8000/auth/register/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pendingRegistration),
+        credentials: 'include'
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.detail || 'Unknown error');
+                });
+            }
+            return response.json();
+        })
+        .then(() => {
+            alert('Registration successful! Please log in.');
+            sessionStorage.removeItem('pendingRegistration');
+            window.location.href = 'index.html'; // Переход на страницу логина
+        })
+        .catch(error => {
+            console.error('Registration completion error:', error.message);
+            alert('Failed to complete registration. Please try again.');
+        });
+}
+
+// Валидация email
+function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+// Валидация телефона
+function validatePhone(phone) {
+    const phonePattern = /^\+\d{5,15}$/;
+    return phonePattern.test(phone);
+}
+
 function checkAccess() {
     fetch('http://localhost:8000/auth/me/', {
         credentials: 'include' // Важно для работы с куками
@@ -118,17 +170,6 @@ function checkAccess() {
         });
 }
 
-// Валидация email
-function validateEmail(email) {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-}
-
-// Валидация телефона
-function validatePhone(phone) {
-    const phonePattern = /^\+\d{5,15}$/; // Номер должен начинаться с + и содержать от 5 до 15 цифр
-    return phonePattern.test(phone);
-}
 
 // Проверка авторизации при загрузке страницы
 window.onload = () => {
@@ -136,3 +177,4 @@ window.onload = () => {
         checkAccess();
     }
 };
+

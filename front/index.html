@@ -10,7 +10,7 @@
     <!-- Форма авторизации и регистрации -->
     <div class="auth-container" id="authContainer">
         <h1 id="authTitle">Login</h1>
-        <div class="error" id="error">Invalid email or password</div>
+        <div class="error" id="error" style="display: none;">Invalid email or password</div>
 
         <!-- Поля формы -->
         <input type="email" id="email" placeholder="Email">
@@ -23,21 +23,18 @@
         <!-- Кнопка действия -->
         <button onclick="submitAuth()" id="authButton">Log In</button>
 
+        <!-- Кнопка для перехода на страницу выбора фильмов -->
+        <button onclick="redirectToMovies()" id="moviesButton" style="display: none; margin-top: 10px;">
+            Go to Movie Selection
+        </button>
+
         <!-- Переключатель между авторизацией и регистрацией -->
         <div class="toggle" onclick="toggleAuth()">
             Don't have an account? Register
         </div>
     </div>
 
-    <!-- Секция выбора фильмов -->
-    <div class="movies-container" id="moviesContainer" style="display: none;">
-        <h3>Выберите 10 фильмов, которые вам нравятся</h3>
-        <div id="moviesList"></div>
-        <div class="error" id="moviesError">Выберите ровно 10 фильмов!</div>
-        <button onclick="submitSelectedMovies()">Подтвердить выбор</button>
-    </div>
-
-
+    <!-- Подключение внешнего JavaScript -->
     <script src="js/auth.js"></script>
 </body>
 </html>
