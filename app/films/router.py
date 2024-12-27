@@ -92,3 +92,14 @@ async def get_recommendations(movies: MovieList):
             return response.json()
     except httpx.HTTPStatusError as e:
         raise HTTPException(status_code=e.response.status_code, detail=str(e))
+    
+
+@router.post("/batch/", summary="Получить информацию о нескольких фильмах по их ID")
+async def get_films_by_ids(movie_ids: List[int]) -> List[SFilm]:
+    # Получаем все фильмы по переданным ID
+    films = await FilmDAO.find_by_ids(movie_ids)
+    
+    if not films:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Фильмы с такими ID не найдены!")
+    
+    return films
